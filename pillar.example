@@ -45,7 +45,7 @@ transmission_daemon_settings:
   rpc-authentication-required: true
   rpc-bind-address: "0.0.0.0"
   rpc-enabled: true
-  rpc-password: "{30776e4657a508a6366a26f5048a79e95f01e58e/PtZno5H"
+  rpc-password: "example unhashed password"
   rpc-port: 9091
   rpc-url: "/transmission/"
   rpc-username: transmission
