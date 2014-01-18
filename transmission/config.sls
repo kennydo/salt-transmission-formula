@@ -32,3 +32,5 @@ transmission_daemon_sighup:
     - name: pkill -HUP transmission-da
     - watch:
       - file: transmission_daemon_settings_file
+    - watch_in:
+      - service: transmission_daemon
