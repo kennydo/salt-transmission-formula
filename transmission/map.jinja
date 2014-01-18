@@ -1,9 +1,11 @@
 {% set transmission = salt['grains.filter_by']({
     'Debian': {
         'user': 'debian-transmission',
+        'group': 'debian-transmission',
     },
     'RedHat': {
         'user': 'transmission',
+        'group': 'transmission',
     },
 }, merge=salt['pillar.get']('transmission:lookup')) %}
 
