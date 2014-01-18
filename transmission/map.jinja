@@ -1,0 +1,21 @@
+{% set transmission = salt['grains.filter_by']({
+    'Debian': {
+        'user': 'debian-transmission',
+    },
+    'RedHat': {
+        'user': 'transmission',
+    },
+}, merge=salt['pillar.get']('transmission:lookup')) %}
+
+{% set transmission_daemon = salt['grains.filter_by']({
+    'Debian': {
+        'package': 'transmission-daemon',
+        'service': 'transmission-daemon',
+        'settings_file': '/etc/transmission-daemon/settings.json',
+    },
+    'RedHat': {
+        'package': 'transmission-daemon',
+        'service': 'transmission-daemon',
+        'settings_file': '/var/lib/transmission/.config/transmission-daemon/settings.json',
+    },
+}, merge=salt['pillar.get']('transmission_daemon:lookup')) %}
