@@ -4,26 +4,28 @@ include:
   - transmission
 
 transmission_daemon_settings_file:
-  file.serialize:
+  file.managed:
     - name: {{ transmission_daemon.settings_file }}
     - user: {{ transmission.user }}
     - group: {{ transmission.group }}
     - mode: 600
     - require:
       - pkg: transmission_daemon
-    - formatter: json
-    - dataset:
-        {%- for key, value in pillar.get('transmission_daemon_settings', {}).iteritems() %}
-            {%- if value is sameas true %}
-        {{ key }}: True
-            {%- elif value is sameas false %}
-        {{ key }}: False
-            {%- elif value is number %}
-        {{ key }}: {{ value }}
-            {%- else %}
-        {{ key }}: "{{ value }}"
-            {%- endif %}
-        {%- endfor %}
+    - contents: |
+        {
+            {%- for key, value in pillar.get('transmission_daemon_settings', {})|dictsort %}
+                {%- if value is sameas true %}
+            "{{ key }}": true
+                {%- elif value is sameas false %}
+            "{{ key }}": false
+                {%- elif value is number %}
+            "{{ key }}": {{ value }}
+                {%- else %}
+            "{{ key }}": "{{ value }}"
+                {%- endif -%}{% if not loop.last %}, {% else %}
+        {% endif %}
+            {%- endfor -%}
+        }
 
 transmission_daemon_sighup:
   cmd.wait:
