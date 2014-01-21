@@ -8,9 +8,11 @@ transmission_daemon_settings_file:
     - name: {{ transmission_daemon.settings_file }}
     - user: {{ transmission.user }}
     - group: {{ transmission.group }}
-    - mode: 600
-    - require:
-      - pkg: transmission_daemon
+    - mode: 700
+    - dir_mode: 755
+    - makedirs: True
+    - watch_in:
+      - service: transmission_daemon
     # We manually make the template for the JSON instead of using the JSON
     # serializer because the transmission-daemon writes the JSON file
     # with a space after each comma (at the end of the line).
@@ -36,6 +38,7 @@ transmission_daemon_sighup:
   cmd.wait:
     # The SIGHUP signal makes the daemon reload the settings file.
     - name: pkill -HUP transmission-da
+    - onlyif: pgrep transmission-da
     - watch:
       - file: transmission_daemon_settings_file
     - watch_in:
